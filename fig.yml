@@ -18,7 +18,7 @@ postgres:
     USER: "buzzfeed_user" 
     PASS: "buzzfeed_password"
     DB: "buzzfeed"
-    EXTENSIONS: "uuid-ossp pgcrypto"
+    EXTENSIONS: "uuid-ossp pgcrypto  pg_trgm"
   expose:
     - "5432"
   ports: 

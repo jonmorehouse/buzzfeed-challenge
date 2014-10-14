@@ -19,7 +19,7 @@ class Video(object):
             );
         """
 
-        create_index = """CREATE INDEX IF NOT EXISTS
+        create_index = """CREATE INDEX
             title_index on video 
             USING gist (title gist_trgm_ops);
         """
