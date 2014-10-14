@@ -33,13 +33,13 @@ class Video(object):
     @classmethod
     def find(self, **kw):
 
-        pass
-
-
-
-
-
-
-
-
+        query = """SELECT set_limit(0.5); 
+            SELECT title
+            FROM video
+            WHERE title %% %s
+        """
+        results = db.execute_with_results(query, values=(kw.get("search"),))
+        if results:
+            return results[0]
+        return None
 

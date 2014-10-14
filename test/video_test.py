@@ -35,6 +35,17 @@ class VideoTest(basetest.BaseTest):
             self.assertIsNotNone(None)
 
 
+    def test_find(self):
+
+        video_id = video.Video.create(**self.params)
+        self.assertIsNone(video.Video.find(search="aaa"))
+        self.assertEquals(video.Video.find(search="test"), self.params["title"])
+
+
+
+
+
+
 
         
 
