@@ -1,0 +1,37 @@
+web:
+  build: .
+  command: python /app/api.py
+  links:
+    - postgres
+    - redis
+  ports: 
+    - "4243:8000"
+  environment:
+    REDIS_HOST: "redis_1"
+    REDIS_PORT: "6379"
+
+    POSTGRES_HOST: "postgres_1"
+    POSTGRES_PORT: "5432"
+    POSTGRES_USER: "accounts"
+    POSTGRES_PASS: "accounts_pass"
+    POSTGRES_DB: "accounts"
+
+postgres:
+  image: paintedfox/postgresql
+  environment: 
+    USER: "accounts" 
+    PASS: "accounts_password"
+    DB: "accounts"
+    EXTENSIONS: "uuid-ossp pgcrypto"
+  expose:
+    - "5432"
+  ports: 
+    - "5432:5432"
+
+redis:
+  image: redis
+  expose:
+    - "6379"
+  ports: 
+    - "6379:6379"
+
