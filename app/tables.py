@@ -1,21 +1,22 @@
-from sql import *
 import psycopg2
+
 import data_stores
 
 # TODO convert this class to use method_missing for simplifying the loc to implement query_one, query_many etc...
-class Video(object):
+class VideoTable(object):
 
     """ Handle queries and setup of the Accounts table. Use classmethods only """
 
     @classmethod
     def create_if_not_exists(cls):
 
-        # NOTE originally used BIT VARYING(128) for password hash
+        # NOTE originally used published_at timestamp with time zone
+        # NOTE but string makes more sense and is more cpu efficient since we don't need to manipulate data
         create_table = """CREATE TABLE IF NOT EXISTS video (
             id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
             title text UNIQUE NOT NULL,
             duration decimal,
-            published_at timestamp with time zone
+            published_at text
             );
         """
 

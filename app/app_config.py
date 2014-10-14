@@ -8,5 +8,8 @@ Config.load_from_list([
     "POSTGRES_USER",
     "POSTGRES_PASS",
     "POSTGRES_DB",
+    "SEARCH_ACCURACY",
+    "PORT"
     ])
+
 

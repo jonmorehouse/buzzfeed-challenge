@@ -12,9 +12,14 @@ class BaseTest(TestCase):
         return app
 
     def setUp(self):
-        tables.Video.create_if_not_exists()
+        tables.VideoTable.create_if_not_exists()
+        self.params = {
+                "title": "Test Title", 
+                "duration": 940000,
+                "pub": "Wed, 28 May 2014 21:00:31 +0000",
+        }
 
     def tearDown(self):
-        tables.Video.drop_if_exists()
+        tables.VideoTable.drop_if_exists()
 
 

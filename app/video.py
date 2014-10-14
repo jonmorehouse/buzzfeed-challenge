@@ -1,7 +1,8 @@
 import sql
 import psycopg2
+from app_config import Config
 
-from tables import Video as db
+import tables
 
 class Video(object):
 
@@ -15,11 +16,10 @@ class Video(object):
         query = """insert into video
             (title, duration, published_at) 
             VALUES (%s, %s, %s) 
-            RETURNING id, published_at
+            RETURNING title, duration, published_at
         """
-        res = db.execute_with_results(query, values=(kw.get("title"), kw.get("duration"), kw.get("pub")) )
-        # NOTE return id
-        return res[0]
+        res = tables.VideoTable.execute_with_results(query, values=(kw.get("title"), kw.get("duration"), kw.get("pub")) )
+        return self._normalize_results(res)
 
     @classmethod
     def create_many(self, videos):
@@ -28,18 +28,27 @@ class Video(object):
             (title, duration, published_at) 
             VALUES (%(title)s, %(duration)s, %(pub)s)
         """
-        db.execute_many(query, value_dicts=videos)
+        for video in videos:
+            self.create(**video)
+        #tables.VideoTable.execute_many(query, value_dicts=videos)
 
     @classmethod
     def find(self, **kw):
 
-        query = """SELECT set_limit(0.5); 
-            SELECT title
-            FROM video
-            WHERE title %% %s
+        """ Note ... this uses the pg_trgm extension which indexes the text. We can switch the value later (this probably shouldn't be hardcoded)"""
+
+        query = """ SELECT title, duration, published_at, title <-> %s AS similarity
+            FROM video 
+            WHERE similarity(title, %s)::numeric > 0.00
+            ORDER BY similarity LIMIT 1
         """
-        results = db.execute_with_results(query, values=(kw.get("search"),))
+        results = tables.VideoTable.execute_with_results(query, values=(kw.get("search"), kw.get("search")))
         if results:
-            return results[0]
+            return self._normalize_results(results)
         return None
+
+    @classmethod
+    def _normalize_results(self, results):
+        return {"title": results[0], "duration": str(results[1]), "published_at": results[2]}
+
 
