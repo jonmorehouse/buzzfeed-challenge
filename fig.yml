@@ -3,35 +3,24 @@ web:
   command: python /app/api.py
   links:
     - postgres
-    - redis
   ports: 
     - "4243:8000"
   environment:
-    REDIS_HOST: "redis_1"
-    REDIS_PORT: "6379"
-
     POSTGRES_HOST: "postgres_1"
     POSTGRES_PORT: "5432"
-    POSTGRES_USER: "accounts"
-    POSTGRES_PASS: "accounts_pass"
-    POSTGRES_DB: "accounts"
+    POSTGRES_USER: "buzzfeed_user"
+    POSTGRES_PASS: "buzzfeed_password"
+    POSTGRES_DB: "buzzfeed"
 
 postgres:
-  image: paintedfox/postgresql
+  image: jonmorehouse/postgresql
   environment: 
-    USER: "accounts" 
-    PASS: "accounts_password"
-    DB: "accounts"
+    USER: "buzzfeed_user" 
+    PASS: "buzzfeed_password"
+    DB: "buzzfeed"
     EXTENSIONS: "uuid-ossp pgcrypto"
   expose:
     - "5432"
   ports: 
     - "5432:5432"
-
-redis:
-  image: redis
-  expose:
-    - "6379"
-  ports: 
-    - "6379:6379"
 

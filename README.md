@@ -28,12 +28,26 @@
 
 proper environment variables set in `.env`. Note that `$CONTAINER_HOST` and `$APP_HOST` refer to the location of Docker.
 
+### Development 
 ~~~ sh
+$ virtualenv .
+$ source bin/activate
+$ pip install -r requirements.txt -r dev_requirements.txt
+
+# set up postgres server
 $ fig up -d postgres
 
 ~~~
 
-## Design Arguments
+### Deployment
+
+~~~ sh
+
+# start application running on port 8000 on your docker container host
+$ fig up -d
+~~~
+
+## Design Approach
 
 1. I approached this project as if I was building out a production app to display some of my api design skills and how I approach building an api that should be maintained and easily workable by many developers
 
@@ -53,10 +67,18 @@ $ fig up -d postgres
 
 9. I'm building this inherently synchronous from teh start. If I need to scale this up, I would approach the problem by either using parallel docker containers to run the app or gevent.
 
+10. On all file insertions, we assume that one failed insertino means the file has been compromised and therefore no videos will be inserted. This is for safety and predictability.
+
+11. I'm directly inserting the publication date string into the query and letting postgresql convert it for me. Any bad sql statements will be caught by pscyopg and this will err if there is a bad date that looks safe, making the transaction safe and atomic
+
 ## ToDo
 
 1. Restructure code base so that modules are nested into packages. There should be a video package and a package that contains shared logic across the application
 
 2. Switch PsycoPG2 to use a connection pool
+
+3. Add in further tests for video_test (ie: check bad video, check bad video in create_many method etc)
+
+
 
 

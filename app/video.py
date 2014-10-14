@@ -5,70 +5,41 @@ from tables import Video as db
 
 class Video(object):
 
-    pass
+    @classmethod
+    def create(self, **kw):
+        """ Create a single video with one transaction/cursor """
+        
+        # to_timestamp('05 Dec 2000', 'DD Mon YYYY')
+        # you don't need to cast the timestamp unless requirements change :)
+        #VALUES (%s, %s, to_timestamp(%s, 'Dy, DD Month YYYY HH:MI:SS ))
+        query = """insert into video
+            (title, duration, published_at) 
+            VALUES (%s, %s, %s) 
+            RETURNING id, published_at
+        """
+        res = db.execute_with_results(query, values=(kw.get("title"), kw.get("duration"), kw.get("pub")) )
+        # NOTE return id
+        return res[0]
 
-    #def __init__(self, **kw):
+    @classmethod
+    def create_many(self, videos):
+        """ Create many videos with one transaction. Rollback if it fails. Assumes that videos is an array of dicts"""
+        query = """insert into video
+            (title, duration, published_at) 
+            VALUES (%(title)s, %(duration)s, %(pub)s)
+        """
+        db.execute_many(query, value_dicts=videos)
 
-        #self.account_id = kw.get("account_id")
-        #self.table = sql.Table("accounts")
+    @classmethod
+    def find(self, **kw):
 
-    #""" Account is the backing for creating, retrieving, and removing accounts """
-    #def signup(self, **kw):
+        pass
 
-        #form = kw.get("form")
 
-        ## NOTE create the user
-        #query = """insert into accounts
-            #(phone_number, username, password_hash)
-            #VALUES (%s, %s, crypt(%s, gen_salt('md5')))
-            #RETURNING id, phone_number, username
-            #"""
-        #values = (form.get("phone_number"), form.get("username"), "some_password")
-        #try:
-            #result = db.query_one(query, values = values)
-        #except psycopg2.Error as e:
-            #raise e
-            #return False
 
-        ## NOTE pull apart the result tuple and trigger a new "activation"
-        #self.account_id = account_id = result[0]
-        #phone_number = result[1]
-        #username = result[2]
 
-        #activation.Activation(account_id = account_id).trigger(phone_number = phone_number)
-        #return {"account_id": account_id, "username": username}
 
-    #def login(self, **kw):
 
-        #pass
-
-    #def logout(self, **kw):
-
-        #pass
-
-    #def activate(self):
-        #self._execute_activation_change(True)
-
-    #def deactivate(self):
-        #self._execute_activation_change(False)
-
-    #""" PROTECTED METHODS """
-    #def _execute_activation_change(self, value):
-        #query = """UPDATE accounts
-            #SET activated = %s
-            #WHERE account_id = %s
-            #RETURNING id, username
-        #"""
-        #values = (value, self.account_id)
-        #try:
-            #result = db.query_one(query, values = values)
-        #except psycopg.Error as e:
-            #raise e
-            #return False
-
-        #account_id = result[0]
-        #username = result[1]
-        #return {"account_id": account_id, "username": username}
 
 
 

@@ -1,7 +1,7 @@
 import os
 import psycopg2
-
 import tables
+
 from app_config import Config
 
 pg_conn = psycopg2.connect(database=Config.POSTGRES_DB,

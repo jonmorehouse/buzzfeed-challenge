@@ -25,3 +25,6 @@ class VideoActionValidations:
         return True
 
 
+    # TODO - check and convert the duration / pub fields and cast them correctly
+
+
