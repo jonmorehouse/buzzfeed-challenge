@@ -19,9 +19,24 @@ class Video(object):
             );
         """
 
-        create_index = """CREATE INDEX
-            title_index on video 
-            USING gist (title gist_trgm_ops);
+        # NOTE create the index if it does not exist
+        create_index = """DO $$
+        BEGIN
+
+        IF NOT EXISTS (
+            SELECT 1
+            FROM pg_class c
+            JOIN pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relname = 'title_index'
+            AND n.nspname = 'public'
+
+            ) THEN 
+                
+            CREATE INDEX title_index on public.video USING gist (title gist_trgm_ops);
+
+        END IF;
+
+        END$$;
         """
 
         cls.execute(create_table)
@@ -80,7 +95,7 @@ class Video(object):
 
     @classmethod
     def execute_many(cls, query, **kw):
-        """ Run a many query """
+        """ Run a many query eg: insert many """
         cursor = data_stores.pg_conn.cursor()
 
         try:
@@ -91,6 +106,5 @@ class Video(object):
             raise e
 
         cursor.close() 
-
 
 

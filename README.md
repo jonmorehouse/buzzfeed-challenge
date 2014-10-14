@@ -71,6 +71,10 @@ $ fig up -d
 
 11. I'm directly inserting the publication date string into the query and letting postgresql convert it for me. Any bad sql statements will be caught by pscyopg and this will err if there is a bad date that looks safe, making the transaction safe and atomic
 
+12. I'm using pg_trgm to do a levenstein match based search for titles. This involves querying an index which is created in tables.py
+
+13. I'd like to consider moving all the table statements to procs on the database server, but for now, its pretty nice to have them in tables
+
 ## ToDo
 
 1. Restructure code base so that modules are nested into packages. There should be a video package and a package that contains shared logic across the application
