@@ -1,3 +1,2 @@
 Flask-Testing==0.4.2
 fig==0.5.2
--e git://github.com/jonmorehouse/py-config.git@e82836296cb54df39901847000d5eec132281c78#egg=py_config-master

@@ -3,11 +3,11 @@
 
 ## Overview
 
-I put a 4 hour hard time limit on this project for myself. I attempted to build the basis of a professional api that could be maintained and extended beyond the requirements of this project. I purposely used flask and some low level postgres queries, to keep things as simple and fluid as possible. By exposing a module called `action_handler` I created some metaprogramming based responses to handle actions `create, find, process_file`. These action_handler methods were called from the api and the solutions.py file to solve the challenges at hand and meet requirements.
+I put a 4 hour hard time limit on this project for myself. I attempted to build the basis of a professional api that could be maintained and extended beyond the requirements of this project. I purposely used flask and work with postgres directly, to keep things as simple and fluid as possible while also challenging myself to focus on better code. By exposing a module called `action_handler` I created some metaprogramming based responses to handle actions `create, find, process_file`. These action_handler methods were called from the api and the solutions.py file to solve the challenges at hand and meet requirements.
 
-I wrote some minor tests, just to help the process of building this project go faster. I plan on extending the tests to get more unit test coverage. As of now, the app has been tested manually and with the 
+I wrote some minor tests, just to help the process of building this project go faster. I plan on extending the tests to get more unit test coverage. As of now, the app has been tested manually and with the `test/app_test.py` spec. 
 
-I decided to use a postgres module called pg_trgm (popular text search index) to handle text search. This is not only highly efficient but fairly accurate and easy to maintain, its also something I haven't used before so that was a good experience. 
+I decided to use a postgres module called pg_trgm (popular text search index) to handle text search. This is not only highly efficient but fairly accurate and easy to maintain, its also something I haven't used before so implementing with this was a good experience for me. I'm going to work on implementing elastic search into the mix to get better responses for search queries.
 
 The entire development environment is created and managed with docker. By running `fig up -d postgres` you can start a docker container running postgres and can connect to it by setting the correct environment variables. All configuration is done via the environment and you can find defaults to get set up properly in the `.env` file. 
 
@@ -43,13 +43,14 @@ $ \. bashenv .env
 ### Testing Requirements
 
 ~~~ sh
-$ ./solution.py init_db load_db match_unknowns
+$ ./solution.py init_db fill_db match_unknowns
 ~~~
 
 ### Development 
 
 Start application for testing 
 ~~~ sh
+$ pip install virtualenv
 $ virtualenv .
 $ source bin/activate
 $ pip install -r requirements.txt -r dev_requirements.txt
